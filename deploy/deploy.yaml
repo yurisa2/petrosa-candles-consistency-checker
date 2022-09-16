@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: petrosa-candles-consistency-checker-deploy
+  namespace: petrosa-apps
+  labels:
+    app: petrosa-candles-consistency-checker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: petrosa-candles-consistency-checker
+  template:
+    metadata:
+      labels:
+        app: petrosa-candles-consistency-checker
+    spec:
+      containers:
+      - name: petrosa-candles-consistency-checker
+        image: yurisa2/petrosa-candles-consistency-checker:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+          - name: MONGO_URI
+            valueFrom:
+              secretKeyRef:
+                name: petrosa-apps-secret
+                key: MONGO_URI
+                optional: false
