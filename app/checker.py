@@ -1,6 +1,7 @@
 import pymongo
 import os
 import datetime
+import time
 
 
 class PETROSAdbchecker(object):
@@ -21,6 +22,7 @@ class PETROSAdbchecker(object):
                                                )
 
             if not found:
+                time.sleep(5)
                 return True
 
             if(found['period'] == '5m'):
