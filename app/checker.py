@@ -22,8 +22,8 @@ class PETROSAdbchecker(object):
                                                )
 
             if not found:
-                print('Not suitable check to find')
-                time.sleep(600)
+                # print('Not suitable check to find')
+                time.sleep(1)
                 return True
 
             if(found['period'] == '5m'):
@@ -50,13 +50,39 @@ class PETROSAdbchecker(object):
 
             candles_found = list(candles_found)
             if(count_check == len(candles_found)):
-                print(found, ' OK')
+                # print(found, ' OK')
                 self.backfill_col.update_one({"_id": found['_id']}, {
                                "$set": {"checked": True}})
                 return True
+
             else:
-                self.backfill_col.update_one(
-                    {"_id": found['_id']}, {"$set": {"state": 0}})
+                if('checking_times' in found and found['checking_times'] > 5):
+                    print('Exhausted tentatives for ', found)
+                    self.backfill_col.update_one(
+                        {"_id": found['_id']}, {"$set": {"state": 1, "checked": True}})
+
+                elif('checking_times' in found and found['checking_times'] > 5):
+                    found['checking_times'] += 1
+                    self.backfill_col.update_one(
+                        {"_id": found['_id']},
+                            {"$set":
+                                {"state": 0,
+                                 "checked": False,
+                                 "checking_times": found['checking_times']
+                                 }
+                             })
+
+                elif(('checking_times' not in found):
+                    found['checking_times'] = 1
+                    self.backfill_col.update_one(
+                        {"_id": found['_id']},
+                            {"$set":
+                                {"state": 0,
+                                 "checked": False,
+                                 "checking_times": found['checking_times']
+                                 }
+                             })
+
                 return False
 
         except Exception as e:
