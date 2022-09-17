@@ -20,6 +20,9 @@ class PETROSAdbchecker(object):
                                                 }
                                                )
 
+            if not found:
+                return True
+
             if(found['period'] == '5m'):
                 col_name = 'm5'
                 count_check = 288
@@ -55,7 +58,7 @@ class PETROSAdbchecker(object):
 
         except Exception as e:
             print('Error in checker', e)
-            pass
+            raise
 
     def run(self):
         while True:
