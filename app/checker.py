@@ -72,7 +72,7 @@ class PETROSAdbchecker(object):
                                  }
                              })
 
-                elif(('checking_times' not in found):
+                elif('checking_times' not in found):
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                             {"$set":
