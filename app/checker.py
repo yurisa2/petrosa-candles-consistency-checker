@@ -22,6 +22,7 @@ class PETROSAdbchecker(object):
                                                )
 
             if not found:
+                print('Not suitable check to find')
                 time.sleep(5)
                 return True
 
