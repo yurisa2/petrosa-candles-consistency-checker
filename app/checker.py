@@ -10,7 +10,7 @@ class PETROSAdbchecker(object):
                                         os.getenv(
                                             'MONGO_URI', 'mongodb://root:wUx3uQRBC8@localhost:27017'),
                                         readPreference='secondaryPreferred',
-                                        appname='petrosa-nosql-crypto'
+                                        appname='petrosa-apps-consistency-checker'
                                         )
         self.backfill_col = self.client_mg.petrosa_crypto['backfill']
 
