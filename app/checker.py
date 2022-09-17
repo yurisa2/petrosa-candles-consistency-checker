@@ -23,7 +23,7 @@ class PETROSAdbchecker(object):
 
             if not found:
                 print('Not suitable check to find')
-                time.sleep(5)
+                time.sleep(60)
                 return True
 
             if(found['period'] == '5m'):
