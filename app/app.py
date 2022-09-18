@@ -3,6 +3,9 @@ import threading
 from app import checker
 from datetime import datetime
 from flask import Flask
+import time
+import random
+
 
 app = Flask(__name__)
 
@@ -10,6 +13,7 @@ start_datetime = datetime.utcnow()
 
 checker_instance = checker.PETROSAdbchecker()
 
+time.sleep(random.randint(5, 150))
 threading.Thread(target=checker_instance.run).start()
 
 
