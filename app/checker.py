@@ -56,16 +56,18 @@ class PETROSAdbchecker(object):
                 return True
 
             else:
-                print("hmmm thats wrong: ")
-                print(found)
+                print("That's Wrong, found this much: ",
+                      len(candles_found), found)
 
-                if('checking_times' in found and found['checking_times'] > 5):
-                    print('Exhausted tentatives for ', found)
+                if('checking_times' in found and found['checking_times'] > 10):
+                    print('Exhausted tentatives')
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
-                elif('checking_times' in found and found['checking_times'] > 5):
+                elif('checking_times' in found and found['checking_times'] > 10):
+                    print('I found it but will increase cheking_times')
+
                     found['checking_times'] += 1
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
@@ -77,6 +79,8 @@ class PETROSAdbchecker(object):
                          })
 
                 elif('checking_times' not in found):
+                    print('There is not checking times bro')
+
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set":
