@@ -18,7 +18,7 @@ class PETROSAdbchecker(object):
         try:
             found = self.backfill_col.find_one({"state": 1,
                                                 "checked": False,
-                                                "day": {"$not": {datetime.datetime.today().strftime("%Y-%m-%d")}}
+                                                "day": {"$ne": datetime.datetime.today().strftime("%Y-%m-%d")}
                                                 }
                                                )
 
