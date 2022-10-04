@@ -8,7 +8,7 @@ class PETROSAdbchecker(object):
     def __init__(self):
         self.client_mg = pymongo.MongoClient(
                                         os.getenv(
-                                            'MONGO_URI', 'mongodb://root:wUx3uQRBC8@localhost:27017'),
+                                            'MONGO_URI', 'mongodb://root:QnjfRW7nl6@localhost:27017'),
                                         readPreference='secondaryPreferred',
                                         appname='petrosa-apps-consistency-checker'
                                         )
@@ -56,31 +56,35 @@ class PETROSAdbchecker(object):
                 return True
 
             else:
+                print("hmmm thats wrong: ")
+                print(found)
+
                 if('checking_times' in found and found['checking_times'] > 5):
                     print('Exhausted tentatives for ', found)
                     self.backfill_col.update_one(
-                        {"_id": found['_id']}, {"$set": {"state": 1, "checked": True}})
+                        {"_id": found['_id']},
+                        {"$set": {"state": 1, "checked": True}})
 
                 elif('checking_times' in found and found['checking_times'] > 5):
                     found['checking_times'] += 1
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
-                            {"$set":
-                                {"state": 0,
-                                 "checked": False,
-                                 "checking_times": found['checking_times']
-                                 }
-                             })
+                        {"$set":
+                         {"state": 0,
+                          "checked": False,
+                          "checking_times": found['checking_times']
+                          }
+                         })
 
                 elif('checking_times' not in found):
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
-                            {"$set":
-                                {"state": 0,
-                                 "checked": False,
-                                 "checking_times": 1
-                                 }
-                             })
+                        {"$set":
+                         {"state": 0,
+                          "checked": False,
+                          "checking_times": 1
+                          }
+                         })
 
                 return False
 
