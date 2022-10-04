@@ -17,7 +17,8 @@ class PETROSAdbchecker(object):
     def check_db(self):
         try:
             found = self.backfill_col.find_one({"state": 1,
-                                                "checked": False
+                                                "checked": False,
+                                                "day": {"$not": datetime.datetime.today().strftime("%Y-%m-%d")}
                                                 }
                                                )
 
@@ -59,13 +60,13 @@ class PETROSAdbchecker(object):
                 print("That's Wrong, found this much: ",
                       len(candles_found), found)
 
-                if('checking_times' in found and found['checking_times'] > 10):
+                if('checking_times' in found and found['checking_times'] < 10):
                     print('Exhausted tentatives')
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
-                elif('checking_times' in found and found['checking_times'] > 10):
+                elif('checking_times' in found and found['checking_times'] < 10):
                     print('I found it but will increase cheking_times')
 
                     found['checking_times'] += 1
