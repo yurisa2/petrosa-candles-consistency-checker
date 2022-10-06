@@ -6,7 +6,7 @@ metadata:
   labels:
     app: petrosa-candles-consistency-checker-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: petrosa-candles-consistency-checker
@@ -23,7 +23,7 @@ spec:
         - containerPort: 8080
         env:
           - name: VERSION
-            value: "0.0.18"
+            value: "0.0.19"
           - name: MONGO_URI
             valueFrom:
               secretKeyRef:
