@@ -2,6 +2,7 @@ import pymongo
 import os
 import datetime
 import time
+import logging
 
 
 class PETROSAdbchecker(object):
@@ -57,17 +58,22 @@ class PETROSAdbchecker(object):
                 return True
 
             else:
-                print("That's Wrong, found this much: ",
-                      len(candles_found), found)
+                msg = 'Thats Wrong, found this much: ' + \
+                    len(candles_found) + found
+                print(msg)
+                logging.info(msg)
 
                 if('checking_times' in found and found['checking_times'] > 10):
                     print('Exhausted tentatives')
+                    logging.info('Exhausted tentatives')
+
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
                 elif('checking_times' in found and found['checking_times'] > 10):
                     print('I found it but will increase cheking_times')
+                    logging.info('I found it but will increase cheking_times')
 
                     found['checking_times'] += 1
                     self.backfill_col.update_one(
@@ -81,6 +87,7 @@ class PETROSAdbchecker(object):
 
                 elif('checking_times' not in found):
                     print('There is not checking times bro')
+                    logging.info('There is not checking times bro')
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
@@ -95,6 +102,8 @@ class PETROSAdbchecker(object):
 
         except Exception as e:
             print('Error in checker', e)
+            logging.error(e)
+
             raise
 
     def run(self):

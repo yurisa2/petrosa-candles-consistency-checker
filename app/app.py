@@ -5,6 +5,7 @@ from datetime import datetime
 from flask import Flask
 import time
 import random
+import logging
 
 
 app = Flask(__name__)
@@ -33,4 +34,5 @@ def queues():
 
 if __name__ == "__main__":
     print('Starting the checker')
+    logging.info('Starting the checker')
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
