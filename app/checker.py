@@ -59,8 +59,9 @@ class PETROSAdbchecker(object):
 
             else:
                 msg = 'Thats Wrong, found this much: ' + \
-                    str(len(candles_found)) + found
+                    str(len(candles_found))
                 print(msg)
+                print(found)
                 logging.info(msg)
 
                 if('checking_times' in found and found['checking_times'] > 10):
