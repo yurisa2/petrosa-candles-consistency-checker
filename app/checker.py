@@ -59,7 +59,7 @@ class PETROSAdbchecker(object):
 
             else:
                 msg = 'Thats Wrong, found this much: ' + \
-                    len(candles_found) + found
+                    str(len(candles_found)) + found
                 print(msg)
                 logging.info(msg)
 
