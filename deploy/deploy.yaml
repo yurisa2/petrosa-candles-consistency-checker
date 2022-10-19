@@ -23,7 +23,7 @@ spec:
         - containerPort: 8080
         env:
           - name: VERSION
-            value: "0.0.19"
+            value: "0.0.20"
           - name: MONGO_URI
             valueFrom:
               secretKeyRef:
