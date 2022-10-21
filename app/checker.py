@@ -64,7 +64,7 @@ class PETROSAdbchecker(object):
                 print(found)
                 logging.info(msg)
 
-                if('checking_times' in found and found['checking_times'] > 10):
+                if('checking_times' in found and found['checking_times'] < 10):
                     print('Exhausted tentatives')
                     logging.info('Exhausted tentatives')
 
@@ -72,7 +72,7 @@ class PETROSAdbchecker(object):
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
-                elif('checking_times' in found and found['checking_times'] > 10):
+                elif('checking_times' in found and found['checking_times'] < 10):
                     print('I found it but will increase cheking_times')
                     logging.info('I found it but will increase cheking_times')
 
