@@ -64,7 +64,7 @@ class PETROSAdbchecker(object):
                 print(found)
                 logging.info(msg)
 
-                if('checking_times' in found and found['checking_times'] < 10):
+                if('checking_times' in found and found['checking_times'] >= 10):
                     print('Exhausted tentatives')
                     logging.info('Exhausted tentatives')
 
