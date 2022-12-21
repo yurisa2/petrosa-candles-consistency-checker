@@ -4,7 +4,6 @@ import datetime
 import time
 import logging
 
-
 class PETROSAdbchecker(object):
     def __init__(self):
         self.client_mg = pymongo.MongoClient(
@@ -24,7 +23,7 @@ class PETROSAdbchecker(object):
                                                )
 
             if not found:
-                # print('Not suitable check to find')
+                # logging.warning('Not suitable check to find')
                 time.sleep(1)
                 return True
 
@@ -52,7 +51,7 @@ class PETROSAdbchecker(object):
 
             candles_found = list(candles_found)
             if(count_check == len(candles_found)):
-                # print(found, ' OK')
+                # logging.warning(found, ' OK')
                 self.backfill_col.update_one({"_id": found['_id']}, {
                                "$set": {"checked": True}})
                 return True
@@ -60,20 +59,18 @@ class PETROSAdbchecker(object):
             else:
                 msg = 'Thats Wrong, found this much: ' + \
                     str(len(candles_found))
-                print(msg)
-                print(found)
-                logging.info(msg)
+                logging.warning(msg)
+                logging.warning(found)
 
                 if('checking_times' in found and found['checking_times'] >= 10):
-                    print('Exhausted tentatives')
-                    logging.info('Exhausted tentatives')
+                    logging.warning('Exhausted tentatives')
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
                 elif('checking_times' in found and found['checking_times'] < 10):
-                    print('I found it but will increase cheking_times')
+                    logging.warning('I found it but will increase cheking_times')
                     logging.info('I found it but will increase cheking_times')
 
                     found['checking_times'] += 1
@@ -87,8 +84,7 @@ class PETROSAdbchecker(object):
                          })
 
                 elif('checking_times' not in found):
-                    print('There is not checking times bro')
-                    logging.info('There is not checking times bro')
+                    logging.warning('There is not checking times bro')
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
@@ -102,9 +98,8 @@ class PETROSAdbchecker(object):
                 return False
 
         except Exception as e:
-            print('Error in checker', e)
+            logging.warning('Error in checker', e)
             logging.error(e)
-
             raise
 
     def run(self):

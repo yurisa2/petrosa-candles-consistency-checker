@@ -40,11 +40,9 @@ candles_col = client_mg.petrosa_crypto[check_col]
 candles_found = candles_col.find({"ticker": found['symbol'],
                                   "datetime": {"$gte": day_start, "$lt": day_end}})
 
-found['_id']
-
 candles_found = list(candles_found)
 if(count_check == len(candles_found)):
-    print(found, ' OK')
+    logging.warning(found, ' OK')
     col.update_one({"_id": found['_id']}, {"$set": {"checked": True}})
 else:
     col.update_one({"_id": found['_id']}, {"$set": {"state": 0}})
