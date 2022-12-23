@@ -14,9 +14,9 @@ COPY . ./
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 ENV NEW_RELIC_APP_NAME=petrosa-crypto-candles-consistency-checker
-ENV NEW_RELIC_LOG=stdout
 ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
 ENV NEW_RELIC_MONITOR_MODE=true
+ENV NEW_RELIC_LOG_LEVEL=debug
 ENV NEW_RELIC_LOG=/tmp/newrelic.log
 
 ENTRYPOINT ["newrelic-admin", "run-python", "main.py"]
