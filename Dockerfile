@@ -18,4 +18,7 @@ ENV NEW_RELIC_LOG=stdout
 ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
 ENV NEW_RELIC_MONITOR_MODE=true
 
-CMD ["newrelic-admin", "run-program", "python", "main.py"]
+CMD ["newrelic-admin", "generate-config",  $NEW_RELIC_LICENSE_KEY, "newrelic.ini"]
+
+
+ENTRYPOINT ["newrelic-admin", "run-program", "python", "main.py"]
