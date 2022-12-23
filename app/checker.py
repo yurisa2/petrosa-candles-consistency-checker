@@ -14,6 +14,7 @@ class PETROSAdbchecker(object):
                                         )
         self.backfill_col = self.client_mg.petrosa_crypto['backfill']
 
+
     def check_db(self):
         try:
             found = self.backfill_col.find_one({"state": 1,
@@ -59,18 +60,18 @@ class PETROSAdbchecker(object):
             else:
                 msg = 'Thats Wrong, found this much: ' + \
                     str(len(candles_found))
-                logging.warning(msg)
-                logging.warning(found)
+                logging.info(msg)
+                logging.info(found)
 
                 if('checking_times' in found and found['checking_times'] >= 10):
                     logging.warning('Exhausted tentatives')
+                    logging.warning(found)
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
                         {"$set": {"state": 1, "checked": True}})
 
                 elif('checking_times' in found and found['checking_times'] < 10):
-                    logging.warning('I found it but will increase cheking_times')
                     logging.info('I found it but will increase cheking_times')
 
                     found['checking_times'] += 1
@@ -85,6 +86,7 @@ class PETROSAdbchecker(object):
 
                 elif('checking_times' not in found):
                     logging.warning('There is not checking times bro')
+                    logging.warning(found)
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
@@ -98,7 +100,6 @@ class PETROSAdbchecker(object):
                 return False
 
         except Exception as e:
-            logging.warning('Error in checker', e)
             logging.error(e)
             raise
 
