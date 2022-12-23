@@ -3,6 +3,7 @@ import os
 import datetime
 import time
 import logging
+import newrelic.agent
 
 class PETROSAdbchecker(object):
     def __init__(self):
@@ -14,7 +15,7 @@ class PETROSAdbchecker(object):
                                         )
         self.backfill_col = self.client_mg.petrosa_crypto['backfill']
 
-
+    @newrelic.agent.background_task()
     def check_db(self):
         try:
             found = self.backfill_col.find_one({"state": 1,

@@ -1,5 +1,3 @@
-import os
-import threading
 from app import checker
 from datetime import datetime
 import time
