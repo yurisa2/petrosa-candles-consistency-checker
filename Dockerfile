@@ -13,5 +13,9 @@ COPY . ./
 # Install production dependencies.
 RUN pip3 install --no-cache-dir -r requirements.txt
 
+ENV NEW_RELIC_APP_NAME=petrosa-crypto-candles-consistency-checker
+ENV NEW_RELIC_LOG=stdout
+ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
+ENV NEW_RELIC_MONITOR_MODE=true
 
-entrypoint ["python", "main.py"]
+ENTRYPOINT ["newrelic-admin", "run-program", "python", "main.py"]
