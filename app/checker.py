@@ -5,6 +5,7 @@ import time
 import logging
 import newrelic.agent
 
+
 class PETROSAdbchecker(object):
     def __init__(self):
         self.client_mg = pymongo.MongoClient(
@@ -65,8 +66,8 @@ class PETROSAdbchecker(object):
                 logging.info(found)
 
                 if('checking_times' in found and found['checking_times'] >= 10):
-                    logging.warning('Exhausted tentatives')
-                    logging.warning(found)
+                    logging.info('Exhausted tentatives')
+                    logging.info(found)
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
@@ -86,8 +87,8 @@ class PETROSAdbchecker(object):
                          })
 
                 elif('checking_times' not in found):
-                    logging.warning('There is not checking times bro')
-                    logging.warning(found)
+                    logging.info('There is not checking times bro')
+                    logging.info(found)
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
