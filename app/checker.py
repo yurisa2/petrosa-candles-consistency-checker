@@ -52,11 +52,13 @@ class PETROSAdbchecker(object):
             candles_found = candles_col.find({"ticker": found['symbol'],
                                               "datetime": {"$gte": day_start, "$lt": day_end}})
 
+            
+
             candles_found = list(candles_found)
             if(count_check == len(candles_found)):
                 # logging.warning(found, ' OK')
                 self.backfill_col.update_one({"_id": found['_id']}, {
-                               "$set": {"checked": True}})
+                    "$set": {"checked": True, "last_checked": datetime.datetime.now().isoformat()}})
                 return True
 
             else:
@@ -71,7 +73,7 @@ class PETROSAdbchecker(object):
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
-                        {"$set": {"state": 1, "checked": True}})
+                        {"$set": {"state": 1, "checked": True, "last_checked": datetime.datetime.now().isoformat()}})
 
                 elif('checking_times' in found and found['checking_times'] < 10):
                     logging.info('I found it but will increase cheking_times')
@@ -82,7 +84,8 @@ class PETROSAdbchecker(object):
                         {"$set":
                          {"state": 0,
                           "checked": False,
-                          "checking_times": found['checking_times']
+                          "checking_times": found['checking_times'],
+                          "last_checked": datetime.datetime.now().isoformat()
                           }
                          })
 
@@ -95,7 +98,8 @@ class PETROSAdbchecker(object):
                         {"$set":
                          {"state": 0,
                           "checked": False,
-                          "checking_times": 1
+                          "checking_times": 1,
+                          "last_checked": datetime.datetime.now().isoformat()
                           }
                          })
 
