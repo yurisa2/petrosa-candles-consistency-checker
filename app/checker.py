@@ -7,7 +7,7 @@ import newrelic.agent
 
 
 class PETROSAdbchecker(object):
-    def __init__(self):
+    def __init__(self) -> None:
         self.client_mg = pymongo.MongoClient(
                                         os.getenv(
                                             'MONGO_URI', 'mongodb://root:QnjfRW7nl6@localhost:27017'),
@@ -17,7 +17,7 @@ class PETROSAdbchecker(object):
         self.backfill_col = self.client_mg.petrosa_crypto['backfill']
 
     @newrelic.agent.background_task()
-    def check_db(self):
+    def check_db(self) -> bool:
         try:
             found = self.backfill_col.find_one({"state": 1,
                                                 "checked": False,
@@ -50,7 +50,9 @@ class PETROSAdbchecker(object):
 
             candles_col = self.client_mg.petrosa_crypto[check_col]
             candles_found = candles_col.find({"ticker": found['symbol'],
-                                              "datetime": {"$gte": day_start, "$lt": day_end}})
+                                              "datetime": {"$gte": day_start, 
+                                                           "$lt": day_end}}
+                                             )
 
             
 
@@ -58,7 +60,8 @@ class PETROSAdbchecker(object):
             if(count_check == len(candles_found)):
                 # logging.warning(found, ' OK')
                 self.backfill_col.update_one({"_id": found['_id']}, {
-                    "$set": {"checked": True, "last_checked": datetime.datetime.now().isoformat()}})
+                    "$set": {"checked": True, 
+                             "last_checked": datetime.datetime.now()}})
                 return True
 
             else:
@@ -73,7 +76,8 @@ class PETROSAdbchecker(object):
 
                     self.backfill_col.update_one(
                         {"_id": found['_id']},
-                        {"$set": {"state": 1, "checked": True, "last_checked": datetime.datetime.now().isoformat()}})
+                        {"$set": {"state": 1, "checked": True, 
+                                  "last_checked": datetime.datetime.now()}})
 
                 elif('checking_times' in found and found['checking_times'] < 10):
                     logging.info('I found it but will increase cheking_times')
@@ -85,7 +89,7 @@ class PETROSAdbchecker(object):
                          {"state": 0,
                           "checked": False,
                           "checking_times": found['checking_times'],
-                          "last_checked": datetime.datetime.now().isoformat()
+                          "last_checked": datetime.datetime.now()
                           }
                          })
 
@@ -99,7 +103,7 @@ class PETROSAdbchecker(object):
                          {"state": 0,
                           "checked": False,
                           "checking_times": 1,
-                          "last_checked": datetime.datetime.now().isoformat()
+                          "last_checked": datetime.datetime.now()
                           }
                          })
 
