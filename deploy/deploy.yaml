@@ -21,7 +21,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: VERSION
-            value: "0.0.36"
+            value: "0.0.37"
           - name: MONGO_URI
             valueFrom:
               secretKeyRef:
